@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../../globals.css";
 import { Suspense } from "react";
-import Loading from "./loader";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import GlobalError from "./global-error";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import GlobalError from "@/app/global-error";
+import Loading from "@/app/loader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FMS",
-  description: "New App For FMS",
+  title: "FMS Auth",
+  description: "Please Login",
 };
 
 export default function RootLayout({
