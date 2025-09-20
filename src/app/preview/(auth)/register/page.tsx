@@ -62,13 +62,14 @@ export default function RegisterPage() {
       });
 
       const result = await res.json();
+
       if (!res.ok) {
         alert(result.error || "Registration failed");
         return;
       }
 
       alert(result.message || "Registration successful! Please login.");
-      router.push("/preview/login");
+      router.push("/preview/dashboard");
     } catch (err) {
       console.error("Registration error:", err);
       alert("Something went wrong. Please try again.");

@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../../globals.css";
 import { Suspense } from "react";
-import Loading from "./loader";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import GlobalError from "./global-error";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { UserProvider } from "@/hooks/Context/UserInfo";
+import { redirect } from "next/navigation";
+import { getUser } from "../../../../actions/user/getUser";
+import GlobalError from "@/app/global-error";
+import Loading from "@/app/loader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,11 +25,16 @@ export const metadata: Metadata = {
   description: "New App For FMS",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  const userInfo = await getUser();
+
+  if (!userInfo) redirect("/preview/login");
+
   return (
     <html lang="en">
       <body
@@ -34,8 +42,8 @@ export default function RootLayout({
       >
         <ErrorBoundary errorComponent={GlobalError}>
           <Suspense fallback={<Loading />}>
-          {children}
-          <SpeedInsights/>
+            <UserProvider serverProfile={userInfo}>{children}</UserProvider>
+            <SpeedInsights />
           </Suspense>
         </ErrorBoundary>
       </body>

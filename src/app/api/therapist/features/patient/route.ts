@@ -1,7 +1,7 @@
 // app/api/therapist/patient/create/route.ts
 import { NextResponse } from "next/server";
-import { createClient } from "@/supabase/server"; // adjust path if needed
 import { getUser } from "../../../../../../actions/user/getUser";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
   try {

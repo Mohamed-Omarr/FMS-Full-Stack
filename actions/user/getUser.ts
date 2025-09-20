@@ -1,24 +1,42 @@
-'use server'
-import { createClient } from "../../src/supabase/server"
+import { createClient } from "@/lib/supabase/server";
 
-export const getUser= async () => {
-    try {
-        const supabase = await createClient();
-        
-        const {
-            data: { user } ,
-        } = await supabase.auth.getUser();
+export type PatientContact = { email: string; phone: string };
+export type Patient = { id: string; name: string; age: number; contact: PatientContact[], status:string };
+export type Therapist = { id: string; name: string; email: string; patient: Patient[] };
 
-        if (user) {
-            const { data } = await supabase
-            .from("therapist")
-            .select("id, name, email")
-            .eq("id", user.id)
-            .single();
-            return data;
-        }
+export const getUser = async (): Promise<Therapist | null> => {
+  try {
+    const supabase = await createClient();
 
-    } catch (error) {
-        throw new Error ("Failed to get user",{cause:error})
-    }
-}
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return null;
+
+    const { data, error } = await supabase
+      .from("therapist")
+      .select(`
+        id,
+        name,
+        email,
+        patient:patient(
+          id,
+          name,
+          age,
+          contact:contact(
+            email,
+            phone
+          ),
+          status
+        )
+      `)
+      .eq("id", user.id)
+      .single();
+
+    if (error) throw error;
+
+    return data;
+
+  } catch (err) {
+    console.error("Failed to get user:", err);
+    return null;
+  }
+};
