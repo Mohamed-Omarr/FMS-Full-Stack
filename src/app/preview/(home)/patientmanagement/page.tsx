@@ -43,10 +43,13 @@ export type FlattenedPatient = {
  * Displays a table of patients with filtering, searching, and adding new patients.
  *
  * @component
- * @returns {JSX.Element} Patient management interface
  *
  */
+
+export const dynamic = "force-dynamic"; 
+
 export default function PatientManagement() {
+
   const data = useUser();
 
   const [statusFilter, setStatusFilter] = useState("all");
