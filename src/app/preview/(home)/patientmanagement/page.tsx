@@ -22,7 +22,9 @@ import { Badge } from "@/components/ui/badge";
 import { useUser } from "@/hooks/Context/UserInfo";
 import { redirect } from "next/navigation";
 
-// Flattened patient type
+/**
+ * Represents a flattened patient for display in the UI.
+ */
 export type FlattenedPatient = {
   id: string;
   name: string;
@@ -35,14 +37,24 @@ export type FlattenedPatient = {
   status: string;
 };
 
+/**
+ * React component for managing patients.
+ *
+ * Displays a table of patients with filtering, searching, and adding new patients.
+ *
+ * @component
+ * @returns {JSX.Element} Patient management interface
+ *
+ */
 export default function PatientManagement() {
   const data = useUser();
 
-  if (!data.user) return redirect("/preview/login");
-
   const [statusFilter, setStatusFilter] = useState("all");
+
   const [searchFilter, setSearchFilter] = useState("");
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     fullName: "",
     age: "",
@@ -50,7 +62,11 @@ export default function PatientManagement() {
     phone: "",
   });
 
-  // Flatten patients from backend
+  if (!data.user) return redirect("/preview/login");
+
+  /**
+   * Flattens the patient data from the backend for easier table display.
+   */
   const allPatients: FlattenedPatient[] = (data.user.patient ?? []).map(
     (p) => ({
       id: p.id,
@@ -61,11 +77,13 @@ export default function PatientManagement() {
       therapistName: data.user?.name ?? "",
       lastAssessment: null,
       fmsScore: "-",
-      status: (p.status ?? undefined ),
+      status: p.status ?? "pending",
     })
   );
 
-  // Filtered patients
+  /**
+   * Filter patients by search text and status.
+   */
   const filteredPatients = allPatients.filter((patient) => {
     const matchesSearch =
       patient.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
@@ -76,6 +94,12 @@ export default function PatientManagement() {
     return matchesSearch && matchesStatus;
   });
 
+  /**
+   * Handles submission of the "Add Patient" form.
+   * Sends a POST request to the server to create a new patient.
+   *
+   * @param {React.FormEvent} e - Form submit event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = new FormData();

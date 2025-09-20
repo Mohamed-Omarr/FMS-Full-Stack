@@ -30,6 +30,13 @@ const UserContext = createContext<UserContextType>({
   user: null,
 });
 
+/**
+ * Provider component for the `UserContext`.
+ * @param {object} props
+ * @param {ReactNode} props.children - React children nodes
+ * @param {UserProfile | null} props.serverProfile - Initial server-provided user profile
+ * @returns {JSX.Element} The context provider wrapping children
+ */
 export function UserProvider({
   children,
   serverProfile,
@@ -44,6 +51,11 @@ export function UserProvider({
   );
 }
 
+/**
+ * Hook to access the authenticated user from `UserContext`.
+ * @returns {UserContextType} The current user context
+ *
+ */
 export function useUser() {
   return useContext(UserContext);
 }

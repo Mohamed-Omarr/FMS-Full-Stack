@@ -5,6 +5,7 @@ export default function GlobalError({
 }: {
   error: Error & { digest?: string };
 }) {
+  console.error(error);
   return (
     <html>
       <body>
