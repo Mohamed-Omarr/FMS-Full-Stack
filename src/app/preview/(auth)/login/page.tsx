@@ -57,7 +57,7 @@ export default function LoginPage() {
 
       if (res.ok) {
         alert(result.message || "Login successful!");
-        router.push("/preview/dashboard");
+        router.push("/preview/patientmanagement");
       } else {
         alert(result.error || "Invalid credentials!");
       }

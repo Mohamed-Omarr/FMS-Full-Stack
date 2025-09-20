@@ -43,7 +43,7 @@ export async function updateSession(request: NextRequest) {
 
   // Redirect authenticated users away from login/register
   if (user && authRoutes.includes(url.pathname) && !isApiRoute) {
-    url.pathname = "/preview/dashboard";
+    url.pathname = "/preview/patientmanagement";
     return NextResponse.redirect(url);
   }
 

@@ -69,7 +69,7 @@ export default function RegisterPage() {
       }
 
       alert(result.message || "Registration successful! Please login.");
-      router.push("/preview/dashboard");
+      router.push("/preview/patientmanagement");
     } catch (err) {
       console.error("Registration error:", err);
       alert("Something went wrong. Please try again.");
